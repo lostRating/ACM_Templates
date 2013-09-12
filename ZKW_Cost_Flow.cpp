@@ -136,5 +136,5 @@ int main()
 				dis[i] += imp;
 	}
 	printf("%d\n", cost);
-	return 0;
+	return  0;
 }

@@ -138,7 +138,7 @@ int main()
 		if (f[i] == i)
 			ans += d[pre[i]][i];
 	printf("%.10f\n", ans);
-	return 0;
+	return  0;
 }
 
 

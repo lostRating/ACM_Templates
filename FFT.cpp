@@ -112,7 +112,7 @@ int main()
 		long long tot = 1LL * N * (N - 1) * (N - 2) / 6;
 		printf("%.7f\n", 1. * ans / tot);
 	}
-	return 0;
+	return  0;
 }
 
 
