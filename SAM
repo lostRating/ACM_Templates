@@ -23,8 +23,8 @@ void Construct(){
 		if (!q) p->f = root; else
 			if (q->len + 1 == q->ch[c[i]]->len) q->f = q->ch[c[i]]; else{
 				Node *y = q->ch[c[i]], *r = &pool[ss++];
-				*y = *r;
-				y->len = q->len + 1;
+				*r = *y;
+				r->len = q->len + 1;
 				y->f = p->f = r;
 				for (; q && q->ch[c[i]] == y; q = q->f) q->ch[c[i]] = r;
 			}
