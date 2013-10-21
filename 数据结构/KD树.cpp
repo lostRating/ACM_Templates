@@ -1,15 +1,3 @@
-#include <iostream>
-#include <cstdio>
-#include <cstring>
-#include <algorithm>
-#include <cstdlib>
-#include <string>
-#include <set>
-#include <map>
-#include <queue>
-#include <vector>
-#include <cmath>
-
 typedef long long LL;
 #define pb push_back
 using namespace std;
@@ -51,7 +39,7 @@ struct KdTree{
     LL dist(Point p){
         LL tmp = 0;
         for (int i = 0; i < 2; ++i)
-            if (p.c[i] < minc[i]) tmp += (LL)(minc[i] - p.c[i]) * (LL)(minc[i] - p.c[i]); else 
+            if (p.c[i] < minc[i]) tmp += (LL)(minc[i] - p.c[i]) * (LL)(minc[i] - p.c[i]); else
                 if (p.c[i] > maxc[i]) tmp += (LL)(p.c[i] - maxc[i]) * (LL)(p.c[i] - maxc[i]);
         return tmp;
     }

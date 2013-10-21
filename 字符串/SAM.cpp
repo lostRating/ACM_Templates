@@ -1,19 +1,3 @@
-#include <iostream>
-#include <cstdio>
-#include <cstring>
-#include <algorithm>
-#include <cstdlib>
-#include <cmath>
-#include <vector>
-#include <queue>
-#include <set>
-#include <map>
-#include <string>
-
-typedef long long LL;
-#define pb push_back
-using namespace std;
-
 void Construct(){
 	for (int i = 0; i < n; ++i){
 		Node *p = &pool[ss++], *q = last;

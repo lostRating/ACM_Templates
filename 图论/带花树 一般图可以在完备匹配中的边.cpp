@@ -1,27 +1,3 @@
-#include <iostream>
-#include <cstdio>
-#include <cstdlib>
-#include <ctime>
-#include <cmath>
-#include <cctype>
-#include <cstring>
-#include <algorithm>
-
-#include <map>
-#include <set>
-#include <vector>
-#include <string>
-#include <queue>
-
-#define Rep(i, a, b) for (int i(a); i <= (b); ++i)
-#define Foru(i, a, b) for (int i(a); i < (b); ++i)
-#define Lowbit(x) ((x) & -(x))
-
-using namespace std;
-
-typedef long long LL;
-typedef pair<int, int> pii;
-
 const int maxn=150;
 int Link[maxn][maxn];
 int n,m;

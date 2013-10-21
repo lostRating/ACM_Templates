@@ -1,27 +1,10 @@
-/*
-  Name: Soduko
-  Author:  ASEMBL
-  Date: 06/08/12 12:38
-  Description: SPOJ Soduko
-*/
-#include <cstring>
-#include <cstdio>
-#include <cstdlib>
-#include <algorithm>
-#include <iostream>
-#include <cmath>
-#include <vector>
-
 using namespace std;
 const int MAXL = 16 + 1 , MAXN = 4096+1 , MAXM = 1024+1 , SIXTEEN = 16 ;
 char str[MAXL][MAXL] ;
 
 struct Links
 {
-    int l , r , u , d ;
-    int x , y , num ;
-    int posx , posy ;
-    
+    int l , r , u , d , x , y , num , posx , posy ;
     Links()
     {
         l = r = u = d = x = y = num = posx = posy = 0 ;
@@ -51,7 +34,6 @@ void constructLinkPointEdge( int current , int left , int up , Links p[] )
 void built()
 {
     int total = 0 , rows = 0 ;
-    
     memset( numberInCol , 0 , sizeof numberInCol ) ;
     memset( colRec , 0 , sizeof colRec) ;
     memset( hashrow , 0 , sizeof hashrow );
@@ -72,7 +54,6 @@ void built()
             hashcube[i/4][j/4] |= (1<<(str[i][j]-'A')) ;
         }
     rows ++ ;
-    
     for ( int i = 0 ; i < SIXTEEN ; ++i )
         for ( int j = 0 ; j < SIXTEEN ; ++j )
             if ( str[i][j] == '-' )
@@ -80,12 +61,12 @@ void built()
             {
                 if ( digit( hashrow[i] , k ) || digit( hashcol[j] , k ) || digit( hashcube[i/4][j/4] , k ) )
                     continue ;
-                //  self - row - col - cubes 
+                //  self - row - col - cubes
                 p[++total] = Links( rows , i*SIXTEEN+j + SIXTEEN*SIXTEEN*0 , i , j );
                 p[++total] = Links( rows , i*SIXTEEN+k + SIXTEEN*SIXTEEN*1 , i , j );
                 p[++total] = Links( rows , j*SIXTEEN+k + SIXTEEN*SIXTEEN*2 , i , j );
                 p[++total] = Links( rows , ((i/4)*4+j/4)*SIXTEEN+k + SIXTEEN*SIXTEEN*3 , i , j );
-                
+
                 for ( int t = 0 ; t < 4 ; ++t )
                 {
                     int c = total-t ;
@@ -137,9 +118,7 @@ void back( int start )   //  start - number of head lines
 bool dfs( int deep )
 {
     int min = -1 ;
-    
-    if ( p[0].r == 0 )
-        return true ;
+    if ( p[0].r == 0 ) return true ;
     for ( int i = p[0].r ; i ; i = p[i].r )
         if ( min == -1 || numberInCol[ p[i].y ] < numberInCol[ p[min].y ] )
             min = i ;
@@ -149,7 +128,7 @@ bool dfs( int deep )
         for ( int j = p[i].r ; j != i ; j = p[j].r )
             del( p[j].y+1 );
         str[ p[i].posx ][ p[i].posy ] = p[i].num + 'A' ;
-        
+
         if ( dfs( deep+1 ) )
             return true ;
         for ( int j = p[i].l ; j != i ; j = p[j].l )
@@ -162,7 +141,6 @@ bool dfs( int deep )
 int main()
 {
     int test ;
-    
     for ( scanf("%d",&test) ; test-- ; )
     {
         for ( int i = 0 ; i < SIXTEEN ; ++i )
@@ -174,6 +152,5 @@ int main()
         if ( test )
             printf("\n");
     }
-    
     return 0;
 }

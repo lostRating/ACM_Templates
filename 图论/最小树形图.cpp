@@ -1,32 +1,3 @@
-#include <iostream>
-#include <cstdio>
-#include <cstring>
-#include <string>
-#include <vector>
-#include <cstdlib>
-#include <cmath>
-#include <algorithm>
-#include <map>
-#include <set>
-#include <queue>
-#include <deque>
-#include <ctime>
-#include <sstream>
-#include <fstream>
-#include <bitset>
-
-using namespace std;
-
-typedef long long int64;
-typedef long double real;
-
-#define mp make_pair
-#define pb push_back
-#define sz(X) ((int)((X).size()))
-
-const double eps = 1e-6;
-const int lim = 1000000000;
-
 const int N = 105;
 
 bool ok;
@@ -34,10 +5,7 @@ int n, pre[N], f[N], use[N], L[N];
 double d[N][N], ans;
 vector<double> vec[N];
 
-inline double sqr(double x)
-{
-	return x * x;
-}
+inline double sqr(double x){return x * x;}
 
 void cutcircle()
 {
@@ -140,5 +108,3 @@ int main()
 	printf("%.10f\n", ans);
 	return  0;
 }
-
-

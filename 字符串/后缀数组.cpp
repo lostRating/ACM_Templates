@@ -1,20 +1,13 @@
-#include<iostream>
-#include<cstdio>
-#include<cstring>
-#include<string>
-#include<algorithm>
-using namespace std;
- 
 const int maxn=400100;
 char str[maxn];
 int n,y[maxn],sum[maxn],height[maxn],c[maxn],sa[maxn],rk[maxn];
- 
+
 void swap(int a[maxn],int b[maxn]){
      for (int i=0;i<n;i++){
          int t=a[i];a[i]=b[i];b[i]=t;
      }
 }
- 
+
 int main(){
     memset(sum, 0, sizeof(sum));
 	memset(rk, 0, sizeof(rk));

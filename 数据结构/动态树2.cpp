@@ -1,29 +1,3 @@
-#include <iostream>
-#include <cstdio>
-#include <cstring>
-#include <string>
-#include <vector>
-#include <cstdlib>
-#include <cmath>
-#include <algorithm>
-#include <map>
-#include <set>
-#include <queue>
-#include <deque>
-#include <ctime>
-#include <sstream>
-#include <fstream>
-#include <bitset>
-
-using namespace std;
-
-typedef long long LL;
-typedef long double real;
-
-#define mp make_pair
-#define pb push_back
-#define sz(X) ((int)((X).size()))
-
 struct Node{
 	LL maxl, maxr, maxsum, sum, w, size, flag;
 	bool ff;
@@ -58,8 +32,8 @@ void Splay(Node *p){
 			y->pushdown();
 			q->pushdown();
 			p->pushdown();
-			if (y->ch[0] == q && q->ch[0] == p) Rotate(q, 0); else 
-				if (y->ch[1] == q && q->ch[1] == p) Rotate(q, 1); else 
+			if (y->ch[0] == q && q->ch[0] == p) Rotate(q, 0); else
+				if (y->ch[1] == q && q->ch[1] == p) Rotate(q, 1); else
 					if (q->ch[0] == p) Rotate(p, 0); else Rotate(p, 1);
 		} else q->pushdown(), p->pushdown();
 		if (p->f->ch[0] == p) Rotate(p, 0); else Rotate(p, 1);

@@ -1,40 +1,3 @@
-#include <iostream>
-#include <cstdio>
-#include <cstring>
-#include <string>
-#include <vector>
-#include <cstdlib>
-#include <cmath>
-#include <algorithm>
-#include <map>
-#include <set>
-#include <queue>
-#include <deque>
-#include <ctime>
-#include <sstream>
-#include <fstream>
-#include <bitset>
-#include <iomanip>
-
-using namespace std;
-
-typedef long long int64;
-typedef long long LL;
-typedef long double real;
-typedef long double LD;
-
-#define mp make_pair
-#define PII pair<int, int>
-#define pb push_back
-#define sz(X) ((int)((X).size()))
-
-const double eps = 1e-8;
-const double PI = acos(0.) * 2;
-const int lim = 1000000000;
-const int inf = ~0U >> 1;
-
-template<class T> T abs(T x){return x < 0 ? -x : x;}
-
 int tt[30];
 
 struct Node{
@@ -75,8 +38,8 @@ void Splay(Node *p, Node *t){
 	while (p->f != t){
 		Node *q = p->f, *y = q->f;
 		if (y != t){
-			if (y->ch[0] == q && q->ch[0] == p) Rotate(q, 0); else 
-				if (y->ch[1] == q && q->ch[1] == p) Rotate(q, 1); else 
+			if (y->ch[0] == q && q->ch[0] == p) Rotate(q, 0); else
+				if (y->ch[1] == q && q->ch[1] == p) Rotate(q, 1); else
 					if (q->ch[0] == p) Rotate(p, 0); else Rotate(p, 1);
 		}
 		if (p->f->ch[0] == p) Rotate(p, 0); else Rotate(p, 1);
@@ -92,7 +55,7 @@ Node* rk(int &x){
 		if (u->l >= x){
 			u = u->ch[0];
 			continue;
-		} 
+		}
 		x -= u->l;
 		if (x <= u->s) return u;
 		x -= u->s;

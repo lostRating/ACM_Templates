@@ -1,33 +1,3 @@
-#include <iostream>
-#include <cstdio>
-#include <cstring>
-#include <string>
-#include <vector>
-#include <cstdlib>
-#include <cmath>
-#include <algorithm>
-#include <map>
-#include <set>
-#include <queue>
-#include <deque>
-#include <ctime>
-#include <sstream>
-#include <fstream>
-#include <assert.h>
-
-using namespace std;
-
-typedef long long int64;
-
-#define FOR(i,a,b) for(int i=(a);i<=(b);++i)
-#define ROF(i,a,b) for(int i=(a);i>=(b);--i)
-#define mp make_pair
-#define pb push_back
-#define fi first
-#define se second
-#define sz(a) ((int)(a).size())
-#define ms(a,x)
-
 const int inf = 1000000000;
 const int N = 10005;
 const int M = 10005 * 50;
