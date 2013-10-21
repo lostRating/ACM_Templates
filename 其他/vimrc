@@ -1,0 +1,36 @@
+$HOME/.vimrc
+
+
+set nu mouse=a nobk hls ai si go= ts=4 sts=4 sw=4 foldmethod=marker
+"set nowrap, et
+"set t_Co=256
+set foldmethod=marker
+
+nmap <C-A> ggVG
+vmap <C-C> "+y
+
+syntax on
+
+set fileencodings=ucs-bom,utf-8,cp936,gb18030,gb2312,gbk,big5,euc-jp,euc-kr,latin1
+
+autocmd BufRead,BufNewFile *.cpp,*.java,*.tex,*.py,*.cc,*.h map<F4> : !gedit % <CR>
+autocmd BufRead,BufNewFile *.cpp,*.java,*.py,*.cc map<F3> : vnew %<.in <CR>
+
+autocmd BufRead,BufNewFile *.h map<F9> : !g++ test.cpp -o test <CR>
+"autocmd BufNewFile make_data.cpp 0r ~/Templates/make_data.cpp
+autocmd BufNewFile *.cpp 0r ~/Templates/cpp_template.cpp
+"autocmd BufRead,BufNewFile *.cpp,*.h set foldmethod=indent foldlevel=99
+autocmd BufRead,BufNewFile *.cpp,*.cc map<F12> : !g++ % -o %< -O2<CR>
+autocmd BufRead,BufNewFile *.cpp,*.cc map<F9> : !g++ % -o %< <CR>
+autocmd BufRead,BufNewFile *.cpp,*.cc map<F8> : !time ./%< < %<.in <CR>
+autocmd BufRead,BufNewFile *.cpp,*.cc map<F5> : !time ./%< <CR>
+autocmd BufRead,BufNewFile *.cpp,*.h set cindent
+
+autocmd BufRead,BufNewFile *.java map<F9> : !javac % <CR>
+autocmd BufRead,BufNewFile *.java map<F8> : !java %< < %<.in <CR>
+autocmd BufRead,BufNewFile *.java map<F5> : !java %< <CR>
+
+autocmd BufNewFile *.sh 0r ~/Templates/shellScript.sh
+
+autocmd BufRead,BufNewFile *.markdown set sw=8 sts=8 ts=8 sta
+autocmd BufRead,BufNewFile *.markdown map<F9> : !markdown % >%<.html <CR>
