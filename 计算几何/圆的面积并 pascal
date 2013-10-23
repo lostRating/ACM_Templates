@@ -1,0 +1,83 @@
+program ex3;  
+type real=extended;  
+const e=1e-15;  
+var cr,cx,cy,l,r:array[0..300] of real;  
+    cover:array[0..300] of boolean;  
+    x1,x2,y1,y2,t1,dx,dy,ans,tmp,dist:real;  
+    n,i,j,k,t,tt,ss:longint;  
+  
+procedure swap(var a,b:real);begin tmp:=a;a:=b;b:=tmp end;  
+function eq(a,b:real):boolean;begin eq:=abs(a-b)<e end;  
+function dis(a,b,c,d:real):real;  
+begin dis:=sqrt(sqr(a-c)+sqr(b-d)) end;  
+function ji(x,y:real):real;  
+begin  
+  if x<0 then ji:=arctan(y/x)+pi else  
+  if y<0 then ji:=arctan(y/x)+pi*2 else ji:=arctan(y/x);  
+end;  
+  
+procedure sort(ll,rr:longint);var i,j:longint;  
+begin  
+  i:=ll;j:=rr;t1:=r[(i+j)>>1];  
+  repeat  
+    while r[i]<t1-e do inc(i);  
+    while r[j]>t1+e do dec(j);  
+    if i<=j then begin  
+      swap(l[i],l[j]);swap(r[i],r[j]);  
+      inc(i);dec(j);  
+    end;  
+  until i>j;  
+  if ll<j then sort(ll,j);  
+  if i<rr then sort(i,rr);  
+end;  
+  
+begin  
+  assign(input,'circle.in');reset(input);  
+  assign(output,'circle.out');rewrite(output);  
+  readln(n);  
+  for i:=1 to n do readln(cx[i],cy[i],cr[i]);  
+  for i:=1 to n do begin  
+    t:=0;  
+    for j:=1 to n do if (i<>j)and not cover[j] then begin  
+      dist:=dis(cx[i],cy[i],cx[j],cy[j]);  
+      if dist+cr[i]<cr[j]+e then cover[i]:=true else  
+      if dist+cr[j]<cr[i]+e then continue else  
+      if dist<cr[i]+cr[j]-e then begin  
+        inc(t);  
+        r[t]:=ji(cx[j]-cx[i]+e,cy[j]-cy[i]);  
+        dx:=(sqr(cr[i])-sqr(cr[j])+sqr(dist))/2/dist;  
+        dy:=sqrt(sqr(cr[i])-dx*dx);  
+        l[t]:=r[t]+ji(dx+e,dy);  
+        r[t]:=r[t]-ji(dx+e,dy);  
+        if r[t]<0 then begin  
+          r[t]:=r[t]+2*pi;  
+          l[t]:=l[t]+2*pi;  
+        end;  
+      end;  
+    end;  
+    if (t=0)and not cover[i] then ans:=ans+sqr(cr[i])*pi;  
+    if (t=0)or cover[i] then continue;  
+    sort(1,t);tt:=0;ss:=1;  
+    for j:=1 to t do  
+      if (tt=0)or(r[j]>l[tt]+e) then begin  
+        inc(tt);l[tt]:=l[j];r[tt]:=r[j];  
+      end else if l[tt]<l[j] then l[tt]:=l[j];  
+    while (ss<=tt)and(l[tt]-2*pi>r[ss]-e) do begin  
+      if l[tt]-2*pi<l[ss] then l[tt]:=l[ss]+2*pi;  
+      inc(ss);  
+    end;  
+    for j:=ss to tt do begin  
+      if j<>tt then k:=j+1 else k:=ss;  
+      dx:=r[k]-l[j];  
+      if dx<0 then dx:=dx+2*pi;  
+      ans:=ans+sqr(cr[i])/2*(dx-sin(dx));  
+      x1:=cx[i]+cr[i]*cos(l[j]);  
+      y1:=cy[i]+cr[i]*sin(l[j]);  
+      x2:=cx[i]+cr[i]*cos(r[k]);  
+      y2:=cy[i]+cr[i]*sin(r[k]);  
+      ans:=ans+(x1*y2-x2*y1)/2;  
+    end;  
+  end;  
+  writeln(ans:0:6);  
+  close(input);close(output);  
+end.  
