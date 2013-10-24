@@ -1,0 +1,140 @@
+#include <cstdio>
+#include <cmath>
+#include <algorithm>
+#include <iostream>
+#include <cstring>
+#include <map>
+#include <set>
+#include <vector>
+using namespace std ;
+const int MAXN = 1001 , MAXM = 200001;
+struct edg
+{
+    int tot ;
+    int head[MAXN] , next[MAXM] , g[MAXM] ;
+
+    void init() {  tot = 1 ; memset( head , 0 , sizeof head ) ;}
+    void add( int st , int ed ) {
+        ++tot ;
+        g[tot] = ed ;
+        next[tot] = head[st] ;
+        head[st] = tot ;
+    }
+};
+struct point{
+    double x , y ;
+    point(){}
+    point( double _x , double _y ):x(_x),y(_y) {}
+
+    double arcd() const {return atan2(y,x);}
+    point operator - ( const point &p ) {
+        return point( x-p.x , y-p.y );
+    }
+    void output() {
+        cout << x << ' ' << y << endl ;
+    }
+};
+struct pack{
+    point p ;
+    int i ;
+
+    pack() {}
+    pack(point x , int j):p(x) , i(j) {}
+    bool operator < ( const pack &a ) const {
+        return p.arcd() < a.p.arcd();
+    }
+};
+double det( point a , point b ) {
+    return a.x*b.y - a.y*b.x ;
+}
+
+int n ;
+edg e;
+point p[MAXN] ;
+vector<pack> out[MAXN];
+set<int> link[MAXN];
+int jump[MAXM] ;
+bool visit[MAXM];
+
+int main()
+{
+    int T ;
+    scanf("%d",&T);
+    while(T--) {
+
+        scanf("%d",&n);
+        for ( int i = 1 ; i <= n ; ++i )
+            link[i].clear();
+        for ( int j = 0 ; j < n ; ++j )
+        {
+            int i ;
+            double x , y ;
+            scanf("%d",&i);
+            scanf("%lf%lf",&x,&y);
+            p[i] = point(x,y);
+            int t ;
+            scanf("%d",&t);
+            while(t--)
+            {
+                int q;
+                scanf("%d",&q);
+                if ( q > i )
+                    link[i].insert(q);
+            }
+        }
+        int ask ;
+        scanf("%d",&ask);
+
+        e.init();
+        for ( int i = 1 ; i <= n ; ++i ) out[i].clear();
+        for ( int i = 1 ; i <= n ; ++i )
+        {
+            for ( set<int>::iterator it = link[i].begin() ; it != link[i].end() ; ++it )
+            {
+                int j = *it ;
+                e.add( i , j );
+                out[j].push_back( pack( p[j]-p[i] , e.tot ) );
+
+                e.add( j , i );
+                out[i].push_back( pack( p[i]-p[j] , e.tot ) );
+            }
+        }
+        for ( int i = 1 ; i <= n ; ++i )
+        {
+            sort( out[i].begin() , out[i].end() );
+            int l = out[i].size();
+            for ( int j = 0 ; j < l ; ++j )
+            {
+                int a = out[i][j].i , b = out[i][(j+1)%l].i ;
+                b = b ^ 1 ;
+                jump[a] = b ;
+            }
+        }
+        for ( int i = 2 ; i <= e.tot ; ++i )
+            visit[i] = false ;
+        int ans = 0 ;
+        for ( int i = 2 ; i <= e.tot ; ++i )
+        {
+            if ( visit[i] == false )
+            {
+                int j = i ;
+                int cnt = 0 ;
+                double area = 0 ;
+                do
+                {
+                    point a , b ;
+                    b = p[ e.g[j] ];
+                    a = p[ e.g[j^1] ];
+                    area += det( b , a ) ;
+                    ++cnt ;
+                    visit[j] = true ;
+                    j = jump[j] ;
+                }while( j != i );
+                if ( cnt == ask && area > 0)
+                    ++ans ;
+            }
+        }
+        printf("%d\n",ans);
+    }
+    return 0;
+}
