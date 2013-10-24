@@ -1,0 +1,121 @@
+#include<stdio.h>
+#include<math.h>
+#include<algorithm>
+#define eps 1e-8
+using namespace std;
+
+//二维点
+struct pt
+{
+    double x, y;
+    pt(){}
+    pt(double _x, double _y)
+    {
+        x = _x;
+        y = _y;
+    }
+    pt operator - (const pt p1){return pt(x - p1.x, y - p1.y);}
+    bool operator < (const pt p1)const{return y < p1.y-eps || y < p1.y+eps && x < p1.x;}
+};
+
+double cpr(const pt &a,const pt &b,const pt &c){return (b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x);}
+double vlen(const pt &a){return a.x*a.x+a.y*a.y;}
+
+pt P[105];
+pt Q[105];
+pt O(0, 0);
+int n;
+double ret;
+
+bool polar_cmp(pt a, pt b)
+{
+    double dif = cpr(O, a, b);
+    return (fabs(dif) > eps) ? (dif > 0) : (vlen(a) < vlen(b));
+}
+
+double tria(pt &a, pt &b, pt &c)
+{
+    return fabs(cpr(a, b, c)) / 2.0;
+}
+
+int stk[105][105], top[105];
+double s[105][105];
+
+double area(int a)
+{
+    int m = n - a - 1, j;
+    bool colinear;
+    memcpy(Q, P+a+1, sizeof(P[0]) * m);
+    
+    double left = 1e100, right = -1e100;
+    for (int i = 0; i < m; i++)
+    {
+        Q[i] = Q[i] - P[a];
+        left <?= Q[i].x;
+        right >?= Q[i].x;
+    }
+    if (Q[m-1].y * (right - left) < ret)
+        return 0;
+    sort(Q, Q + m, polar_cmp);
+    
+    double ans = 0.0, cur;
+    for (int i = 0; i < m; i++)
+    {
+        top[i] = 0;
+        j = i - 1;
+        colinear = 0;
+        while (j >= 0 && fabs(cpr(O, Q[i], Q[j])) < eps)
+        {
+            j--;
+            colinear = 1;
+        }
+        for (; j >= 0; j--)
+        {
+            if (top[i] && cpr(Q[i], Q[stk[i][top[i] - 1]], Q[j]) > eps)
+                continue;
+            cur = tria(O, Q[i], Q[j]);
+
+            while (top[j] >= 2 && cpr(Q[i], Q[j], Q[stk[j][top[j] - 2]]) < -eps)
+                top[j]--;
+            if (top[j] && cpr(Q[i], Q[j], Q[stk[j][top[j] - 1]]) < eps)
+                cur += s[j][top[j] - 1];
+            while (top[i] && cur > s[i][top[i]-1])
+                top[i]--;
+            
+            stk[i][top[i]] = j;
+            s[i][top[i]++] = cur;
+        }
+        if (top[i])
+            ans >?= s[i][0];
+        if (colinear)
+            top[i] = 0;
+    }
+    return ans;
+}
+
+void solve()
+{
+    ret = 0;
+    sort(P, P + n);
+    for (int i = 0; i < n; i++)
+    {
+        ret >?= area(i);
+    }
+    printf("%.1lf\n", ret);
+}
+
+int main()
+{
+    int tc;
+    scanf("%d", &tc);
+    while (tc--)
+    {
+        scanf("%d", &n);
+        for (int i = 0; i < n; i++)
+        {
+            scanf("%lf %lf", &P[i].x, &P[i].y);
+        }
+        solve();
+    }
+    return 0;
+}
