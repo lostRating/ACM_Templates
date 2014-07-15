@@ -1,0 +1,169 @@
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <string>
+#include <vector>
+#include <cstdlib>
+#include <cmath>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <deque>
+#include <ctime>
+#include <sstream>
+#include <fstream>
+#include <bitset>
+#include <iomanip>
+#include <cassert>
+
+using namespace std;
+typedef long long LL;
+typedef long double LD;
+
+#define PII pair<int, int>
+#define sz(X) ((int)((X).size()))
+
+#define Rep(i, a, b) for (int i(a); i <= (b); ++i)
+
+template<class T> T abs(T x){return x < 0 ? -x : x;}
+
+const double eps = 1e-8;
+const int maxn = 100100;
+
+struct Point{
+    double x, y;
+    Point(){}
+    Point(double _x, double _y):x(_x), y(_y){}
+    Point operator + (const Point &that)const{
+        return Point(x + that.x, y + that.y);
+    }
+    Point operator - (const Point &that)const{
+        return Point(x - that.x, y - that.y);
+    }
+    Point operator * (const double &d)const{
+        return Point(x * d, y * d);
+    }
+    Point operator / (const double &d)const{
+        return Point(x / d, y / d);
+    }
+    double det(const Point &p)const{
+        return x * p.y - y * p.x;
+    }
+};
+
+int n, num, qt, qh;
+double x[maxn], y[maxn];
+
+int Sign(double x){
+    return x < -eps ? -1 : x > eps;
+}
+
+double cross(Point p1, Point p2, Point p3){
+    return ((p2.x - p1.x) * (p3.y - p1.y) - (p3.x - p1.x) * (p2.y - p1.y));
+}
+
+int crossOp(Point p1, Point p2, Point p3){
+    return Sign(cross(p1, p2, p3));
+}
+
+Point isSS(Point p1, Point p2, Point q1, Point q2){
+    double a1 = cross(q1, q2, p1), a2 = -cross(q1, q2, p2);
+    return (p1 * a2 + p2 * a1) / (a1 + a2);
+}
+
+struct Border{
+    Point p1, p2;
+    double alpha;
+    void setAlpha(){
+        alpha = atan2(p2.y - p1.y, p2.x - p1.x);
+    }
+};
+
+Border border[maxn], que[maxn];
+
+bool operator < (const Border &a, const Border &b){
+    int c = Sign(a.alpha - b.alpha);
+    if (c) return c == 1;
+    return crossOp(b.p1, b.p2, a.p1) >= 0;
+}
+
+bool operator == (const Border &a, const Border &b){
+    return Sign(a.alpha - b.alpha) == 0;
+}
+
+void add(double x, double y, double nx, double ny){
+    border[num].p1 = Point(x, y);
+    border[num].p2 = Point(nx, ny);
+    border[num].setAlpha();
+    ++num;
+}
+
+Point isBorder(const Border &a, const Border &b){
+    return isSS(a.p1, a.p2, b.p1, b.p2);
+}
+
+bool check(const Border &a, const Border &b, const Border &me){
+    Point is = isBorder(a, b);
+    return crossOp(me.p1, me.p2, is) > 0;
+}
+
+
+void convexIntersection(){
+    qh = qt = 0;
+    //sort(border, border + num);
+    num = unique(border, border + num) - border;
+    for (int i = 0; i < num; ++i){
+        Border cur = border[i];
+        while (qh + 1 < qt && !check(que[qt - 2], que[qt - 1], cur)) --qt;
+        while (qh + 1 < qt && !check(que[qh], que[qh + 1], cur)) ++qh;
+        que[qt++] = cur;
+    }
+    while (qh + 1 < qt && !check(que[qt - 2], que[qt - 1], que[qh])) --qt;
+    while (qh + 1 < qt && !check(que[qh], que[qh + 1], que[qt - 1])) ++qh;
+}
+
+int calcArea(){
+    static Point ps[maxn];
+    int cnt = 0;
+    if (qt - qh <= 2){
+        return 0;
+    }
+    for (int i = qh; i < qt; ++i){
+        int next = i + 1 == qt ? qh : i + 1;
+        ps[cnt++] = isBorder(que[i], que[next]);
+    }
+    double area = 0;
+    for (int i = 0; i < cnt; ++i){
+        area += ps[i].det(ps[(i + 1) % cnt]);
+    }
+    return Sign(area);
+}
+
+bool solve(int mid){
+    num = 0;
+    for (int i = 1; i <= n; ++i){
+        int t = i + mid + 1;
+        if (t > n) t -= n;
+        add(x[i], y[i], x[t], y[t]);
+    }
+    convexIntersection();
+    return (calcArea() == 0);
+}
+
+int main(){
+    int Cases;
+    scanf("%d", &Cases);
+    for (; Cases; --Cases){
+        scanf("%d", &n);
+        for (int i = 1; i <= n; ++i)
+            scanf("%lf%lf", &x[n - i + 1], &y[n - i + 1]);
+        int l = 1, r = n - 2;
+        while (l <= r){
+            int mid = (l + r) >> 1;
+            if (solve(mid)) r = mid - 1; else l = mid + 1;
+        }
+        printf("%d\n", r + 1);
+    }
+    return 0;
+}
