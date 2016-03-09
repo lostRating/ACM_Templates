@@ -1,0 +1,1 @@
+Most are others' solutions
