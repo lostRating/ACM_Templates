@@ -1,1 +1,1 @@
-Most are others' solutions
+Most are written by my teammates and me
